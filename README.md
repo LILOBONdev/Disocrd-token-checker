@@ -1,3 +1,3 @@
 <div align="center">
-## Discord token checker
+<h3>Discord token checker</h3>
 </div>
