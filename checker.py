@@ -16,6 +16,8 @@ async def check_token(auth, session):
 
 async def main():
     os.makedirs('results', exist_ok=True)
+    for _ in ['bad.txt','valid.txt']: open(f'results/{_}').close()
+
     try:
         with open('input/tokens.txt', 'r', encoding='utf-8') as file:
             tokens = file.read().strip().split()
@@ -24,9 +26,10 @@ async def main():
         print(f"{Fore.RED}Ошибка: файл input/codes.txt не найден{Fore.RESET}")
         return
     
-    batch_size = 15
+    chunk_size = 100
     async with aiohttp.ClientSession() as session:
-        for i in range(0, len(tokens), batch_size):
-            batch = tokens[i:i + batch_size]
+        for i in range(0, len(tokens), chunk_size):
+            batch = tokens[i:i + chunk_size]
+            os.system(f'title checked: {i} good tokens: {open('results/valid.txt','r',encoding='utf-8').read().split('\n').__len__()-1} bad tokens: {open('results/bad.txt','r',encoding='utf-8').read().split('\n').__len__()-1}')
             tasks = [check_token(code, session) for code in batch]
             await asyncio.gather(*tasks)
