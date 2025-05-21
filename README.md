@@ -10,3 +10,6 @@ from colorama import Fore,init
 import asyncio,aiohttp,os
 ```
 Используемые библиотеки в проекте. ↑
+<br>
+
+> Написанный мною софт можно менять под себя, в файле `[checker.py](https://github.com/LILOBONdev/Disocrd-token-checker/blob/main/checker.py)`
