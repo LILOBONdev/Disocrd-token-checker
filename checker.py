@@ -16,7 +16,7 @@ async def check_token(auth, session):
 
 async def main():
     os.makedirs('results', exist_ok=True)
-    for _ in ['bad.txt','valid.txt']: open(f'results/{_}').close()
+    for _ in ['bad.txt','valid.txt']: open(f'results/{_}','w').close()
 
     try:
         with open('input/tokens.txt', 'r', encoding='utf-8') as file:
