@@ -9,21 +9,23 @@ async def get_token_information(session,auth):
         return await resp_info.json()
     
 async def check_token(auth, session):
-    response_status = await fetch(session,auth)
-    token_info = await get_token_information(session,auth)
-    if response_status == 200 or response_status == 201:
-        print(Fore.GREEN + f'{auth} is good!' + Fore.WHITE)
+    try:
+        response_status = await fetch(session,auth)
+        token_info = await get_token_information(session,auth)
+        if response_status == 200 or response_status == 201:
+            print(Fore.GREEN + f'{auth} is good!' + Fore.WHITE)
 
-        with open('results/valid.txt','a',encoding='utf-8') as valid: valid.write(auth + '\n')
-        with open('results/informated.txt','a',encoding='utf-8') as informated: informated.write(auth + f' ----- {token_info['username']}:{token_info['global_name']}' + '\n')
-    else:
-        print(Fore.RED + f'{auth} is bad!' + Fore.WHITE)
-        with open('results/bad.txt','a',encoding='utf-8') as valid: valid.write(auth + '\n')
+            with open('results/valid.txt','a',encoding='utf-8') as valid: valid.write(auth + '\n')
+            with open('results/informated.txt','a',encoding='utf-8') as informated: informated.write(auth + f' ----- {token_info['username']}:{token_info['global_name']}' + '\n')
+        else:
+            print(Fore.RED + f'{auth} is bad!' + Fore.WHITE)
+            with open('results/bad.txt','a',encoding='utf-8') as valid: valid.write(auth + '\n')
+    except Exception as e: print(Fore.YELLOW + f'{e}')
 
 
 async def main():
     os.makedirs('results', exist_ok=True)
-    for _ in ['bad.txt','valid.txt','informated.txt']: open(f'results/{_}','w').close()
+    for _ in ['bad.txt','valid.txt']: open(f'results/{_}','w').close()
 
     try:
         with open('input/tokens.txt', 'r', encoding='utf-8') as file:
