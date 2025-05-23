@@ -4,11 +4,18 @@ async def fetch(session,auth):
     async with session.get('https://discord.com/api/v10/users/@me',headers={'user-agent': FakeUserAgent().chrome,'authorization': auth}) as res:
         return res.status
 
+async def get_token_information(session,auth):
+    async with session.get('https://discord.com/api/v10/users/@me',headers={'user-agent': FakeUserAgent().chrome,'authorization': auth}) as resp_info:
+        return await resp_info.json()
+    
 async def check_token(auth, session):
     response_status = await fetch(session,auth)
+    token_info = await get_token_information(session,auth)
     if response_status == 200 or response_status == 201:
         print(Fore.GREEN + f'{auth} is good!' + Fore.WHITE)
+
         with open('results/valid.txt','a',encoding='utf-8') as valid: valid.write(auth + '\n')
+        with open('results/informated.txt','a',encoding='utf-8') as informated: informated.write(auth + f' ----- {token_info['username']}:{token_info['global_name']}' + '\n')
     else:
         print(Fore.RED + f'{auth} is bad!' + Fore.WHITE)
         with open('results/bad.txt','a',encoding='utf-8') as valid: valid.write(auth + '\n')
